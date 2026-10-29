@@ -6,6 +6,7 @@ public class PlayerBombFire : MonoBehaviour
     [SerializeField] private Transform _firePoint;
     [SerializeField] private Bomb _bombPrefab;
     [SerializeField] private float _throwPower = 15f;
+    [SerializeField] private float _spinPower = 0.4f;   // 던질 때 주는 회전력 (폭탄이 가벼워서 작은 값으로도 빙글빙글 돈다)
 
     [SerializeField] private int _maxBombCount = 3;   // 가질 수 있는 폭탄 수
     private int _bombCount;                           // 남은 폭탄 수
@@ -44,6 +45,9 @@ public class PlayerBombFire : MonoBehaviour
         // 3. 생성된 수류탄을 시선 방향으로 던지기
         Rigidbody rigidbody = bomb.GetComponent<Rigidbody>();
         rigidbody.AddForce(Camera.main.transform.forward * _throwPower, ForceMode.Impulse);
+
+        // 4. 날아가는 동안 무작위 방향으로 빙글빙글 돌도록 토크를 준다.
+        rigidbody.AddTorque(Random.onUnitSphere * _spinPower, ForceMode.Impulse);
     }
 
 }
