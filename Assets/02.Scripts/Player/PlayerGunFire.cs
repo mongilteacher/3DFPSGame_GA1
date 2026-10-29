@@ -16,7 +16,12 @@ public class PlayerGunFire : MonoBehaviour
 
     [SerializeField] private GameObject[] _muzzleFlashes;
     [SerializeField] private float _flashTime = 0.05f;
-    
+
+    [Header("총알 궤적")]
+    [SerializeField] private LineRenderer _bulletLine;       // 총구에서 맞은 자리까지 그리는 선 (평소에는 꺼 둔다)
+    [SerializeField] private Transform _muzzlePosition;      // 선이 시작되는 총구 끝
+    [SerializeField] private float _lineTime = 0.05f;        // 선이 보이는 시간 (초)
+
     private float _fireTimer = 0f;
     private int _bulletCount = 0;
     private Coroutine _reloadCoroutine = null;
@@ -111,6 +116,11 @@ public class PlayerGunFire : MonoBehaviour
 
         // 4. 레이를 발사하고, 만일 부딛힌 물체가 있다면 이펙트 표시하기
         bool isHit = Physics.Raycast(ray, out hitInfo, _range);
+
+        // 총구에서 맞은 자리(맞은 곳이 없으면 사거리 끝)까지 총알 궤적을 그린다.
+        Vector3 lineEnd = isHit ? hitInfo.point : ray.origin + ray.direction * _range;
+        StartCoroutine(BulletLine_Coroutine(_muzzlePosition.position, lineEnd));
+
         if (isHit)
         {
             // Debug.Log($"{hitInfo.collider.name}이 총알을 맞았다. 대미지: {_damage}");
@@ -141,6 +151,18 @@ public class PlayerGunFire : MonoBehaviour
         }
     }
 
+
+    // 선의 두 끝점을 정해 잠깐 켰다가 끈다.
+    private IEnumerator BulletLine_Coroutine(Vector3 start, Vector3 end)
+    {
+        _bulletLine.SetPosition(0, start);
+        _bulletLine.SetPosition(1, end);
+        _bulletLine.enabled = true;
+
+        yield return new WaitForSeconds(_lineTime);
+
+        _bulletLine.enabled = false;
+    }
 
     private IEnumerator MuzzleFlash_Coroutine()
     {
