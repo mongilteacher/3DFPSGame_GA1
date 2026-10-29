@@ -17,11 +17,20 @@ public class PlayerGunFire : MonoBehaviour
     private float _fireTimer = 0f;
     private int _bulletCount = 0;
     private Coroutine _reloadCoroutine = null;
-    private Animator _animator; 
+    private Animator _animator;
+
+    public int BulletCount => _bulletCount;                 // 남은 총알 수 (밖에서는 읽기만 한다)
+    public int MaxBulletCount => _maxBulletCount;           // 탄창에 들어가는 총알 수
+    public event System.Action<int, int> OnBulletChanged;   // 총알 수가 바뀌면 (남은 수, 탄창 크기)를 알린다.
+
+    private void Awake()
+    {
+        // UI가 Start에서 처음 값을 읽어 가므로, 총알은 Awake에서 채워 둔다.
+        _bulletCount = _maxBulletCount;
+    }
 
     private void Start()
     {
-        _bulletCount = _maxBulletCount;
         _animator = GetComponentInChildren<Animator>();
     }
     
@@ -38,6 +47,7 @@ public class PlayerGunFire : MonoBehaviour
         if (!isMouseVisible && Input.GetButton("Fire1") && _fireTimer <= 0f && _bulletCount > 0)
         {
             _bulletCount--;
+            OnBulletChanged?.Invoke(_bulletCount, _maxBulletCount);  // 한 발 줄었다고 알린다.
             _fireTimer = _fireInterval;
             Shoot();
             
@@ -73,7 +83,8 @@ public class PlayerGunFire : MonoBehaviour
         yield return new WaitForSeconds(_reloadingTime);
         
         _bulletCount = _maxBulletCount;
-        
+        OnBulletChanged?.Invoke(_bulletCount, _maxBulletCount);  // 탄창을 채웠다고 알린다.
+
         Debug.Log("재장전 완료!");
         _reloadCoroutine = null;
     }

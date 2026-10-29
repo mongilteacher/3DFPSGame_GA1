@@ -18,6 +18,9 @@ public class Player : MonoBehaviour, IDamageable
     // Action 자료형: 함수(들)를 저장할 수 있다.
     public event Action OnDamaged = null;
 
+    // 무기 모드가 바뀌면 새 모드를 알린다.
+    public event Action<WeaponMode> OnWeaponModeChanged = null;
+
     private Animator _animator;
     private int _injuredLayerIndex;
     
@@ -40,12 +43,19 @@ public class Player : MonoBehaviour, IDamageable
         // 숫자 키 1은 일반 모드, 2는 저격 모드
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
-            _weaponMode = WeaponMode.Normal;
+            ChangeWeaponMode(WeaponMode.Normal);
         }
         else if (Input.GetKeyDown(KeyCode.Alpha2))
         {
-            _weaponMode = WeaponMode.Sniper;
+            ChangeWeaponMode(WeaponMode.Sniper);
         }
+    }
+
+    // 무기 모드를 바꾸고, 바뀌었다고 알린다.
+    private void ChangeWeaponMode(WeaponMode mode)
+    {
+        _weaponMode = mode;
+        OnWeaponModeChanged?.Invoke(mode);
     }
 
     public void TakeDamage(DamageInfo damageInfo)

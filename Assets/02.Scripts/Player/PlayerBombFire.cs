@@ -7,23 +7,33 @@ public class PlayerBombFire : MonoBehaviour
     [SerializeField] private Bomb _bombPrefab;
     [SerializeField] private float _throwPower = 15f;
 
+    [SerializeField] private int _maxBombCount = 3;   // 가질 수 있는 폭탄 수
+    private int _bombCount;                           // 남은 폭탄 수
+
+    public int BombCount => _bombCount;               // 남은 폭탄 수 (밖에서는 읽기만 한다)
+    public event System.Action<int> OnBombChanged;    // 폭탄 수가 바뀌면 남은 수를 알린다.
+
     private Player _player;
 
-    private void Start()
+    private void Awake()
     {
         _player = GetComponent<Player>();
+        _bombCount = _maxBombCount;  // 폭탄을 가득 가지고 시작한다.
     }
-    
+
     private void Update()
     {
         if (GameManager.Instance.State != GameState.Playing) return;
 
-        // 1. 마우스 오른쪽 버튼 입력 받기
-        if (Input.GetButtonDown("Fire2") && _player.WeaponMode == WeaponMode.Normal)
+        // 1. 마우스 오른쪽 버튼 입력 받기 (일반 모드이고 폭탄이 남아 있을 때만)
+        if (Input.GetButtonDown("Fire2") && _player.WeaponMode == WeaponMode.Normal && _bombCount > 0)
         {
             Shoot();
+
+            _bombCount--;
+            OnBombChanged?.Invoke(_bombCount);  // 하나 줄었다고 알린다.
         }
-        
+
     }
 
     private void Shoot()
