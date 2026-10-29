@@ -10,6 +10,11 @@ public class Player : MonoBehaviour, IDamageable
     public float MaxHealth => _maxHealth;
     public float Health => _health;
 
+    private WeaponMode _weaponMode = WeaponMode.Normal;
+    public WeaponMode WeaponMode => _weaponMode;
+    
+    
+
     // Action 자료형: 함수(들)를 저장할 수 있다.
     public event Action OnDamaged = null;
 
@@ -22,6 +27,20 @@ public class Player : MonoBehaviour, IDamageable
         _injuredLayerIndex = _animator.GetLayerIndex("Injured Layer");
         
         _health = _maxHealth;
+    }
+
+    private void Update()
+    {
+        
+        // 숫자 키 1은 일반 모드, 2는 저격 모드
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            _weaponMode = WeaponMode.Normal;
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            _weaponMode = WeaponMode.Sniper;
+        }
     }
 
     public void TakeDamage(DamageInfo damageInfo)

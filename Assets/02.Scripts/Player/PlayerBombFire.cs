@@ -6,13 +6,20 @@ public class PlayerBombFire : MonoBehaviour
     [SerializeField] private Transform _firePoint;
     [SerializeField] private Bomb _bombPrefab;
     [SerializeField] private float _throwPower = 15f;
+
+    private Player _player;
+
+    private void Start()
+    {
+        _player.GetComponent<Player>();
+    }
     
     private void Update()
     {
         if (GameManager.Instance.State != GameState.Playing) return;
 
         // 1. 마우스 오른쪽 버튼 입력 받기
-        if (Input.GetButtonDown("Fire2"))
+        if (Input.GetButtonDown("Fire2") && _player.WeaponMode == WeaponMode.Normal)
         {
             Shoot();
         }
