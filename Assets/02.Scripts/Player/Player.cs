@@ -32,6 +32,11 @@ public class Player : MonoBehaviour, IDamageable
     private void Update()
     {
         
+        if (GameManager.Instance.State != GameState.Playing)
+        {
+            return;
+        }
+        
         // 숫자 키 1은 일반 모드, 2는 저격 모드
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {

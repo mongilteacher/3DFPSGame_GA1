@@ -11,7 +11,7 @@ public class PlayerBombFire : MonoBehaviour
 
     private void Start()
     {
-        _player.GetComponent<Player>();
+        _player = GetComponent<Player>();
     }
     
     private void Update()
