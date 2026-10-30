@@ -1,7 +1,15 @@
 fileFormatVersion: 2
 guid: 36115e87cceea6848883fdd334bc7042
+AssetOrigin:
+  serializedVersion: 1
+  productId: 398634
+  packageName: Post-Apocalyptic Barrels
+  packageVersion: 1.0
+  assetPath: Assets/Sector Warzone/Post-Apocalyptic Barrels/Models/Post-Apocalyptic
+    Barrels.fbx
+  uploadId: 969558
 ModelImporter:
-  serializedVersion: 24200
+  serializedVersion: 24300
   internalIDToNameTable: []
   externalObjects: {}
   materials:
@@ -9,6 +17,7 @@ ModelImporter:
     materialName: 0
     materialSearch: 1
     materialLocation: 1
+    searchTexturesGlobally: 1
   animations:
     legacyGenerateAnimations: 4
     bakeSimulation: 0
@@ -56,7 +65,7 @@ ModelImporter:
     maxBonesPerVertex: 4
     minBoneWeight: 0.001
     optimizeBones: 1
-    generateMeshLods: 0
+    generateMeshLods: 1
     meshLodGenerationFlags: 0
     maximumMeshLod: -1
     meshOptimizationFlags: -1
@@ -108,11 +117,3 @@ ModelImporter:
   userData: 
   assetBundleName: 
   assetBundleVariant: 
-AssetOrigin:
-  serializedVersion: 1
-  productId: 398634
-  packageName: Post-Apocalyptic Barrels
-  packageVersion: 1.0
-  assetPath: Assets/Sector Warzone/Post-Apocalyptic Barrels/Models/Post-Apocalyptic
-    Barrels.fbx
-  uploadId: 969558
