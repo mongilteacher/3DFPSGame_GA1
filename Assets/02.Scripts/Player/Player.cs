@@ -49,6 +49,10 @@ public class Player : MonoBehaviour, IDamageable
         {
             ChangeWeaponMode(WeaponMode.Sniper);
         }
+        else if (Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            ChangeWeaponMode(WeaponMode.Melee);
+        }
     }
 
     // 무기 모드를 바꾸고, 바뀌었다고 알린다.
