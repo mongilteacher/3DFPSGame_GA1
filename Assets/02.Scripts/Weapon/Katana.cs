@@ -11,6 +11,7 @@ public class Katana : MonoBehaviour
     {
         _player = GetComponentInParent<Player>();
     }
+    
 
     private void OnTriggerEnter(Collider other)
     {

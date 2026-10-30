@@ -1675,6 +1675,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CameraRotate
   _rotationSpeed: 200
+  _followMinY: -40
+  _followMaxY: 60
 --- !u!114 &330585549
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1688,6 +1690,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CameraFollow
   _target: {fileID: 220785613}
+  _mode: 0
+  _thirdPersonOffset: {x: 0.6, y: 0.3, z: -2.5}
+  _backViewOffset: {x: 0, y: 1, z: -4.5}
+  _quarterViewDistance: 12
+  _quarterViewAngle: {x: 45, y: 45, z: 0}
 --- !u!1 &335956373
 GameObject:
   m_ObjectHideFlags: 0
@@ -1842,7 +1849,7 @@ GameObject:
   - component: {fileID: 379912164}
   - component: {fileID: 379912163}
   - component: {fileID: 379912162}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Wall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3059,6 +3066,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerMeleeAttack
   _katanaCollider: {fileID: 65833338}
+  _meleeHitMode: 1
+  _range: 2
+  _angle: 90
+  _targetMask:
+    serializedVersion: 2
+    m_Bits: 768
 --- !u!1 &685935092
 GameObject:
   m_ObjectHideFlags: 0
@@ -5489,6 +5502,7 @@ MonoBehaviour:
   _bulletLine: {fileID: 1428990031}
   _muzzlePosition: {fileID: 592580595}
   _lineTime: 0.05
+  _cameraFollow: {fileID: 0}
 --- !u!114 &1620558216
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5506,6 +5520,8 @@ MonoBehaviour:
   _throwPower: 15
   _spinPower: 0.4
   _maxBombCount: 3
+  _cameraFollow: {fileID: 0}
+  _quarterViewLift: 0.3
 --- !u!114 &1620558217
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5534,6 +5550,7 @@ MonoBehaviour:
   _sniperZoom: {fileID: 685935092}
   _normalPov: 60
   _sniperPov: 15
+  _cameraFollow: {fileID: 0}
 --- !u!1001 &1656979232
 PrefabInstance:
   m_ObjectHideFlags: 0
