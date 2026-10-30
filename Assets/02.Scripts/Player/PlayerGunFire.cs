@@ -7,7 +7,7 @@ public class PlayerGunFire : MonoBehaviour
 {
     [SerializeField] private ParticleSystem _hitEffectPrefab;
 
-    [Header("스탯")] 
+    [Header("스탯")]
     [SerializeField] private int _maxBulletCount = 30;
     [SerializeField] private float _reloadingTime = 3f;
     [SerializeField] private float _range = 100f;            // 사거리
@@ -22,10 +22,14 @@ public class PlayerGunFire : MonoBehaviour
     [SerializeField] private Transform _muzzlePosition;      // 선이 시작되는 총구 끝
     [SerializeField] private float _lineTime = 0.05f;        // 선이 보이는 시간 (초)
 
+    [Header("카메라")]
+    [SerializeField] private CameraFollow _cameraFollow;     // 조준 방향을 알려주는 카메라
+
     private float _fireTimer = 0f;
     private int _bulletCount = 0;
     private Coroutine _reloadCoroutine = null;
     private Animator _animator;
+    private int _hitLayerMask;                               // 플레이어 자신은 맞지 않도록 제외한 레이어
 
     public int BulletCount => _bulletCount;                 // 남은 총알 수 (밖에서는 읽기만 한다)
     public int MaxBulletCount => _maxBulletCount;           // 탄창에 들어가는 총알 수
@@ -35,21 +39,29 @@ public class PlayerGunFire : MonoBehaviour
     {
         // UI가 Start에서 처음 값을 읽어 가므로, 총알은 Awake에서 채워 둔다.
         _bulletCount = _maxBulletCount;
+
+        // 3인칭/백뷰에서는 화면 중앙 레이가 플레이어 몸을 지나가므로 Player 레이어는 무시한다.
+        _hitLayerMask = ~LayerMask.GetMask("Player");
+
+        if (_cameraFollow == null)
+        {
+            _cameraFollow = Camera.main.GetComponent<CameraFollow>();
+        }
     }
 
     private void Start()
     {
         _animator = GetComponentInChildren<Animator>();
     }
-    
-    
+
+
     private void Update()
     {
         if (GameManager.Instance.State != GameState.Playing) return;
 
         // 0. 발사 타이머를 지난 시간만큼 줄인다.
         _fireTimer -= Time.deltaTime;
-        
+
         // 1. 마우스 왼쪽 버튼 입력 받기
         bool isMouseVisible = Cursor.visible;
         if (!isMouseVisible && Input.GetButton("Fire1") && _fireTimer <= 0f && _bulletCount > 0)
@@ -58,14 +70,14 @@ public class PlayerGunFire : MonoBehaviour
             OnBulletChanged?.Invoke(_bulletCount, _maxBulletCount);  // 한 발 줄었다고 알린다.
             _fireTimer = _fireInterval;
             Shoot();
-            
-            
+
+
             _animator.SetBool("Fire", true);
-            
+
             // 이 방식은: 이 모노비헤이비어가 등록한 모든 코루틴을 실행 취소
             // StopAllCoroutines();
-            
-            if(_reloadCoroutine != null)
+
+            if (_reloadCoroutine != null)
             {
                 StopCoroutine(_reloadCoroutine);
                 Debug.Log("재장전 취소!");
@@ -76,7 +88,7 @@ public class PlayerGunFire : MonoBehaviour
         {
             _animator.SetBool("Fire", false);
         }
-        
+
         // 2. R키 누르면 총알 재장전 시작
         if (Input.GetKeyDown(KeyCode.R) && _reloadCoroutine == null)
         {
@@ -87,35 +99,35 @@ public class PlayerGunFire : MonoBehaviour
     private IEnumerator Reloading_Coroutine()
     {
         Debug.Log("재장전 시작!");
-        
+
         yield return new WaitForSeconds(_reloadingTime);
-        
+
         _bulletCount = _maxBulletCount;
         OnBulletChanged?.Invoke(_bulletCount, _maxBulletCount);  // 탄창을 채웠다고 알린다.
 
         Debug.Log("재장전 완료!");
         _reloadCoroutine = null;
     }
-    
+
 
     private void Shoot()
     {
         StartCoroutine(MuzzleFlash_Coroutine());
-        
-        
+
+
         // Ray: 레이저(시작위치, 날아갈 방향)
         // Physics.RayCast: 레이저를 발사
         // RayCastHit: 레이저가 물체와 부딛히면 그 정보를 저장하는 구조체
-        
+
         // 2. 레이(광선)를 생성하고 발사될 위치와 진행 방향 설정하기
-        Transform cameraTransform = Camera.main.transform;
-        Ray ray = new Ray(cameraTransform.position, cameraTransform.forward);
+        //    카메라 모드마다 조준 방향이 다르므로 CameraFollow에게 받아온다.
+        Ray ray = _cameraFollow.GetAimRay();
 
         // 3. 레이가 부딛힌 대상의 정보를 저장할 변수 생성하기
         RaycastHit hitInfo = new RaycastHit();
 
         // 4. 레이를 발사하고, 만일 부딛힌 물체가 있다면 이펙트 표시하기
-        bool isHit = Physics.Raycast(ray, out hitInfo, _range);
+        bool isHit = Physics.Raycast(ray, out hitInfo, _range, _hitLayerMask);
 
         // 총구에서 맞은 자리(맞은 곳이 없으면 사거리 끝)까지 총알 궤적을 그린다.
         Vector3 lineEnd = isHit ? hitInfo.point : ray.origin + ray.direction * _range;
@@ -124,27 +136,27 @@ public class PlayerGunFire : MonoBehaviour
         if (isHit)
         {
             // Debug.Log($"{hitInfo.collider.name}이 총알을 맞았다. 대미지: {_damage}");
-            
+
             // 맞은 자리에 총알 자국 이펙트 만들기
             ParticleSystem effect = Instantiate(_hitEffectPrefab);
             effect.transform.position = hitInfo.point; // 맞은 자리
             effect.transform.forward = hitInfo.normal; // 수직 위치로 회전
             effect.Play();
-            
+
             // 대미지 구조체 만들기
             DamageInfo damageInfo = new DamageInfo();
             damageInfo.Value = _damage;
             damageInfo.HitPoint = hitInfo.point;
             damageInfo.HitNormal = hitInfo.normal;
-            
+
             hitInfo.collider.GetComponent<IDamageable>()?.TakeDamage(damageInfo);
-            
+
             /*
              hitInfo.collider.GetComponent<Zombie>()?.TakeDamage(_damage);
             hitInfo.collider.GetComponent<Drum>()?.TakeDamage(_damage);
             hitInfo.collider.GetComponent<Box>()?.TakeDamage(_damage);
             */
-            
+
             // 황유찬 :         Player
             // 김민쉬:     Zombie, Boss
             // 박현서:  Drum, Box, Bird
@@ -169,9 +181,9 @@ public class PlayerGunFire : MonoBehaviour
         int randomIndex = UnityEngine.Random.Range(0, _muzzleFlashes.Length);
         GameObject flash = _muzzleFlashes[randomIndex];
         flash.SetActive(true);
-        
+
         yield return new WaitForSeconds(_flashTime);
-        
+
         flash.SetActive(false);
     }
 }
