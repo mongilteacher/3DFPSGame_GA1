@@ -4423,6 +4423,7 @@ MonoBehaviour:
   _modeIcons:
   - {fileID: 21300000, guid: 24c302ffe7c18b94e998fba6710b52a5, type: 3}
   - {fileID: 21300000, guid: fae0c277a61a37c4eafe6c6bffadbbad, type: 3}
+  - {fileID: 21300000, guid: bd0057fc98580a74683c5e6657478ee9, type: 3}
   _bulletText: {fileID: 42477838}
   _bombText: {fileID: 990578095}
   _player: {fileID: 1620558217}
