@@ -272,6 +272,7 @@ GameObject:
   - component: {fileID: 65833337}
   - component: {fileID: 65833338}
   - component: {fileID: 65833339}
+  - component: {fileID: 65833340}
   m_Layer: 2
   m_Name: Blade
   m_TagString: Untagged
@@ -342,6 +343,19 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &65833340
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 65833336}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 30c629594fde58e42bff7de79c3d7181, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Katana
+  _damage: 25
 --- !u!1001 &90132744
 PrefabInstance:
   m_ObjectHideFlags: 0
