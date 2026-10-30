@@ -1410,6 +1410,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Goku
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 073207c7b6dd4a74c80165006667de53, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5866666021909216657, guid: 073207c7b6dd4a74c80165006667de53, type: 3}
       propertyPath: m_Controller
       value: 
@@ -1420,7 +1424,10 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 2890340462180134544, guid: 073207c7b6dd4a74c80165006667de53, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1656979233}
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 073207c7b6dd4a74c80165006667de53, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 680068712}
   m_SourcePrefab: {fileID: 100100000, guid: 073207c7b6dd4a74c80165006667de53, type: 3}
 --- !u!4 &311959942 stripped
 Transform:
@@ -3020,6 +3027,24 @@ MonoBehaviour:
   m_Center: {x: 0, y: 1, z: 0}
   m_Area: 3
   m_AffectedAgents: ffffffff
+--- !u!1 &680068710 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 073207c7b6dd4a74c80165006667de53, type: 3}
+  m_PrefabInstance: {fileID: 311959941}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &680068712
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 680068710}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d329f54441f7a74481e11cc0bb0f182, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerMeleeAttack
+  _katanaCollider: {fileID: 65833338}
 --- !u!1 &685935092
 GameObject:
   m_ObjectHideFlags: 0
@@ -5278,7 +5303,6 @@ GameObject:
   - component: {fileID: 1620558216}
   - component: {fileID: 1620558217}
   - component: {fileID: 1620558218}
-  - component: {fileID: 1620558219}
   m_Layer: 7
   m_Name: Player
   m_TagString: Player
@@ -5495,18 +5519,6 @@ MonoBehaviour:
   _sniperZoom: {fileID: 685935092}
   _normalPov: 60
   _sniperPov: 15
---- !u!114 &1620558219
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1620558207}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4d329f54441f7a74481e11cc0bb0f182, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PlayerMeleeAttack
 --- !u!1001 &1656979232
 PrefabInstance:
   m_ObjectHideFlags: 0
