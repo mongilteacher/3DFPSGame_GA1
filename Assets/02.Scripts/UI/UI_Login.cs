@@ -31,14 +31,9 @@ public class UI_Login : MonoBehaviour
 
     private PlayerPrefsAccountRepository _repository = new PlayerPrefsAccountRepository();
 
-    // 이메일: (영문, 숫자, ., _, -)@(영문, 숫자, -)(.영문, 숫자, -)를 1번 이상
-    // 예) abc.def@gmail.com, user_01@mail.co.kr
-    private static readonly Regex EmailRegex = new Regex(@"^[A-Za-z0-9._-]+@[A-Za-z0-9-]+(\.[A-Za-z0-9-]+)+$");
 
-    // 비밀번호: 전방탐색 (?=...)으로 대문자, 소문자, 숫자, 기호가 각각 하나 이상 있는지 검사하고,
-    //           전체는 공백을 제외한 ASCII 출력 문자([!-~]) 8~30 글자
-    // 기호 = [!-/] [:-@] [\[-`] [{-~] (ASCII 출력 문자 중 영문/숫자가 아닌 범위)
-    private static readonly Regex PasswordRegex = new Regex(@"^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[!-/:-@\[-`{-~])[!-~]{8,30}$");
+    private AccountIdSpecification _idSpec = new AccountIdSpecification(); 
+    private AccountPasswordSpecification _passwordSpec = new AccountPasswordSpecification(); 
     
     
     private void Start()
@@ -95,8 +90,6 @@ public class UI_Login : MonoBehaviour
             _messageText.text = "아이디와 비밀번호를 확인해주세요.";
             return;
         }
-        
-        
     }
 
     public void Register()
@@ -125,16 +118,16 @@ public class UI_Login : MonoBehaviour
         }
 
         // ID 규칙: 이메일
-        if (!EmailRegex.IsMatch(id))
+        if (!_idSpec.IsSatisfiedBy(id))
         {
-            _messageText.text = "아이디는 이메일 형식이어야 합니다.";
+            _messageText.text = _idSpec.ErrorMessage;
             return;
         }
 
         // 비밀번호 규칙: 대문자, 소문자, 숫자, 기호를 모두 포함한 8~30 글자
-        if (!PasswordRegex.IsMatch(password))
+        if (!_passwordSpec.IsSatisfiedBy(password))
         {
-            _messageText.text = "비밀번호는 대문자, 소문자, 숫자, 기호를 모두 포함한 8~30 글자여야 합니다.";
+            _messageText.text = _passwordSpec.ErrorMessage;
             return;
         }
 
