@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Text.RegularExpressions;
 using TMPro;
 using UnityEngine;
@@ -83,7 +84,7 @@ public class UI_Login : MonoBehaviour
 
         if (_repository.CheckPassword(id, password))
         {
-            SceneManager.LoadScene("GameScene");
+            SceneLoader.Load("GameScene");
         }
         else
         {
@@ -148,4 +149,6 @@ public class UI_Login : MonoBehaviour
         GotoLogin();
         _messageText.text = "가입했습니다. 로그인 해주세요.";
     }
+
+
 }
